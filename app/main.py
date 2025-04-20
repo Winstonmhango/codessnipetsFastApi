@@ -1,10 +1,7 @@
-import os
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.responses import FileResponse
+from starlette.responses import JSONResponse
 
 from app.api.v1.api import api_router
 from app.core.config import settings
@@ -32,15 +29,13 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-
-# Mount static files
-static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
 @app.get("/")
 def root():
-    return FileResponse(os.path.join(static_dir, "index.html"))
-
+    return JSONResponse({
+        "status": "healthy",
+        "message": "CodeSnippets API is running",
+        "version": "1.0.0"
+    })
 
 if __name__ == "__main__":
     import uvicorn
@@ -48,5 +43,5 @@ if __name__ == "__main__":
         "app.main:app",
         host="0.0.0.0",
         port=settings.PORT,
-        reload=False  # Disable reload in production
+        reload=False
     )

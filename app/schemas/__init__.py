@@ -17,3 +17,13 @@ from app.schemas.learning_path import (
     LearningPathContentItem, LearningPathContentItemCreate, LearningPathContentItemUpdate,
     LearningPathResource, LearningPathResourceCreate, LearningPathResourceUpdate
 )
+from app.schemas.quiz import (
+    Quiz, QuizCreate, QuizUpdate, QuizWithUserAttempt,
+    QuizQuestion, QuizQuestionCreate, QuizQuestionUpdate,
+    QuizAnswer, QuizAnswerCreate, QuizAnswerUpdate,
+    UserQuizAttempt, UserQuizAttemptCreate, UserQuizAttemptUpdate
+)
+from app.schemas.award import (
+    Award, AwardCreate, AwardUpdate, AwardWithDetails,
+    UserAward, UserAwardCreate, UserAwardUpdate, UserWithAwards
+)

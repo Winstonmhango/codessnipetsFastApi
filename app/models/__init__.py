@@ -9,3 +9,13 @@ from app.models.learning_path import (
     LearningPathContentItem,
     LearningPathResource,
 )
+from app.models.quiz import (
+    Quiz,
+    QuizQuestion,
+    QuizAnswer,
+    UserQuizAttempt,
+)
+from app.models.award import (
+    Award,
+    UserAward,
+)

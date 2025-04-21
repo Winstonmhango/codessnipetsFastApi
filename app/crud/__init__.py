@@ -9,3 +9,5 @@ from app.crud.learning_path import (
     learning_path_content_item,
     learning_path_resource,
 )
+from app.crud.quiz import quiz, user_quiz_attempt
+from app.crud.award import award, user_award

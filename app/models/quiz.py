@@ -23,8 +23,8 @@ class Quiz(Base):
     show_correct_answers = Column(Boolean, default=True)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     questions = relationship("QuizQuestion", back_populates="quiz", cascade="all, delete-orphan")
@@ -43,8 +43,8 @@ class QuizQuestion(Base):
     order = Column(Integer, default=0)  # For ordering questions
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     quiz = relationship("Quiz", back_populates="questions")
@@ -62,8 +62,8 @@ class QuizAnswer(Base):
     order = Column(Integer, default=0)  # For ordering answers
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     question = relationship("QuizQuestion", back_populates="answers")
@@ -81,7 +81,7 @@ class UserQuizAttempt(Base):
     answers = Column(JSON)  # Store user's answers as JSON
 
     # Timestamps
-    started_at = Column(DateTime(timezone=True), server_default=func.now)
+    started_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True))
 
     # Relationships

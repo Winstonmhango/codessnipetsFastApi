@@ -1,35 +1,45 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import JSONResponse
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from app.api.v1.api import api_router
 from app.core.config import settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, get_db
 
-logging.basicConfig(level=logging.INFO)
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup logic
-    try:
-        # Log startup information
-        logging.info("Starting up the application")
-        logging.info(f"Database URL: {settings.DATABASE_URL}")
+    logger.info("Starting up the application")
+    logger.info(f"Environment: {os.environ.get('ENVIRONMENT', 'development')}")
 
-        # Test database connection
-        with engine.connect() as _:
-            logging.info("Database connection successful")
+    # Log configuration
+    logger.info(f"API Version: {settings.API_V1_STR}")
+    logger.info(f"Project Name: {settings.PROJECT_NAME}")
+
+    # Attempt to connect to the database, but don't fail startup if it fails
+    try:
+        logger.info(f"Attempting to connect to database: {settings.DATABASE_URL}")
+        with engine.connect() as conn:
+            logger.info("Database connection successful")
     except Exception as e:
-        logging.error(f"Database connection failed: {e}")
-        raise e
+        logger.error(f"Database connection failed: {e}")
+        logger.warning("Application will start, but database operations may fail")
 
     yield
 
     # Shutdown logic
-    logging.info("Shutting down the application")
+    logger.info("Shutting down the application")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -58,12 +68,31 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 @app.get("/")
 def root():
     """Root endpoint that serves as a health check for the API."""
-    return JSONResponse({
-        "status": "healthy",
-        "message": "CodeSnippets API is running",
-        "version": "1.0.0",
-        "environment": "production"
-    })
+    try:
+        # Simple database connection check, but don't fail if it doesn't work
+        db_status = "connected"
+        try:
+            with engine.connect() as _:
+                pass
+        except Exception as e:
+            logger.warning(f"Health check database connection failed: {e}")
+            db_status = "disconnected"
+
+        return JSONResponse({
+            "status": "healthy",
+            "message": "CodeSnippets API is running",
+            "version": "1.0.0",
+            "environment": os.environ.get("ENVIRONMENT", "production"),
+            "database": db_status
+        })
+    except Exception as e:
+        logger.error(f"Error in health check endpoint: {e}")
+        # Always return a 200 response for the health check
+        return JSONResponse({
+            "status": "degraded",
+            "message": "CodeSnippets API is running with issues",
+            "error": str(e)
+        })
 
 if __name__ == "__main__":
     import uvicorn

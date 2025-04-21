@@ -19,3 +19,16 @@ from app.models.award import (
     Award,
     UserAward,
 )
+from app.models.course import (
+    CourseCategory,
+    Course,
+    CourseModule,
+    CourseTopic,
+    TopicLesson,
+    CourseEnrollment,
+    CourseProgress,
+)
+from app.models.marketing import (
+    NewsletterSubscription,
+    MarketingBanner,
+)

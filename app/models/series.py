@@ -23,6 +23,7 @@ class Author(Base):
     # Relationships
     series = relationship("Series", back_populates="author_relation")
     booklets = relationship("Booklet", back_populates="author_relation")
+    courses = relationship("Course", back_populates="author")
 
 
 class Series(Base):

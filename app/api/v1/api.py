@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
     auth, users, categories, posts, series, booklets, learning_paths,
-    quizzes, awards, courses, marketing
+    quizzes, awards, courses, marketing, prelaunch
 )
 
 api_router = APIRouter()
@@ -17,3 +17,4 @@ api_router.include_router(quizzes.router, prefix="/quizzes", tags=["quizzes"])
 api_router.include_router(awards.router, prefix="/awards", tags=["awards"])
 api_router.include_router(courses.router, prefix="/courses", tags=["courses"])
 api_router.include_router(marketing.router, prefix="/marketing", tags=["marketing"])
+api_router.include_router(prelaunch.router, prefix="/prelaunch", tags=["prelaunch"])

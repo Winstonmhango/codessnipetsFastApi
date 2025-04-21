@@ -40,3 +40,10 @@ from app.schemas.marketing import (
     NewsletterSubscription, NewsletterSubscriptionCreate, NewsletterSubscriptionUpdate,
     MarketingBanner, MarketingBannerCreate, MarketingBannerUpdate, BannerStatisticsUpdate
 )
+from app.schemas.prelaunch import (
+    CoursePrelaunchCampaign, CoursePrelaunchCampaignCreate, CoursePrelaunchCampaignUpdate, CoursePrelaunchCampaignWithRelations,
+    PrelaunchSubscriber, PrelaunchSubscriberCreate, PrelaunchSubscriberUpdate,
+    PrelaunchEmailSequence, PrelaunchEmailSequenceCreate, PrelaunchEmailSequenceUpdate, PrelaunchEmailSequenceWithEmails,
+    PrelaunchEmail, PrelaunchEmailCreate, PrelaunchEmailUpdate,
+    CourseAssociation, BookletAssociation, SeriesAssociation, CampaignStatisticsUpdate
+)

@@ -90,6 +90,15 @@ fi
 echo "Checking if health endpoint is defined:"
 grep -n "/health" app/main.py
 
+echo "=== Fixing func.now issues in models ==="
+python fix_func_now.py
+
+echo "=== Fixing func.now issues with text() ==="
+python fix_func_now_with_text.py
+
+echo "=== Creating tables directly with SQL ==="
+python create_tables_directly.py
+
 echo "=== Running app startup test ==="
 python test_app_startup.py
 TEST_RESULT=$?

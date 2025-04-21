@@ -69,7 +69,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    openapi_url=f"{settings.API_V1_STR}/openapi.json" if settings.API_V1_STR.startswith('/') else f"/{settings.API_V1_STR}/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan
@@ -89,7 +89,7 @@ if settings.BACKEND_CORS_ORIGINS:
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 # Include API router
-app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.API_V1_STR if settings.API_V1_STR.startswith('/') else f"/{settings.API_V1_STR}")
 
 # Add debug routes
 @app.get("/debug/environment")

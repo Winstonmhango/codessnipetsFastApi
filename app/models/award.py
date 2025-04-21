@@ -17,8 +17,8 @@ class Award(Base):
     requirements = Column(JSON)  # JSON object with requirements to earn this award
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     user_awards = relationship("UserAward", back_populates="award")
@@ -30,7 +30,7 @@ class UserAward(Base):
     id = Column(String, primary_key=True, index=True)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
     award_id = Column(String, ForeignKey("awards.id"), nullable=False)
-    earned_at = Column(DateTime(timezone=True), server_default=func.now)
+    earned_at = Column(DateTime(timezone=True), server_default=func.now())
     progress = Column(Integer, default=100)  # Progress percentage (100 means completed)
     award_metadata = Column(JSON)  # Additional data about how the award was earned
 

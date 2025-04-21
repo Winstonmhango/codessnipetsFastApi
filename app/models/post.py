@@ -14,7 +14,7 @@ class Post(Base):
     excerpt = Column(Text)
     content = Column(Text)
     cover_image = Column(String)
-    date = Column(DateTime(timezone=True), server_default=func.now)
+    date = Column(DateTime(timezone=True), server_default=func.now())
     author = Column(String, ForeignKey("users.id"))
     category_id = Column(String, ForeignKey("categories.id"))
     reading_time = Column(Integer)
@@ -27,8 +27,8 @@ class Post(Base):
     blocks = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     category = relationship("Category", back_populates="posts")

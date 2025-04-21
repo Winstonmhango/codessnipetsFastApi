@@ -23,8 +23,8 @@ class Booklet(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     author_relation = relationship("Author", back_populates="booklets")
@@ -48,8 +48,8 @@ class BookletChapter(Base):
     booklet_id = Column(String, ForeignKey("booklets.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     booklet = relationship("Booklet", back_populates="chapters")
@@ -66,8 +66,8 @@ class BookletUpdate(Base):
     booklet_id = Column(String, ForeignKey("booklets.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     booklet = relationship("Booklet", back_populates="updates")

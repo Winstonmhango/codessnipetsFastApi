@@ -24,8 +24,8 @@ class LearningPath(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     modules = relationship("LearningPathModule", back_populates="learning_path")
@@ -46,8 +46,8 @@ class LearningPathModule(Base):
     learning_path_id = Column(String, ForeignKey("learning_paths.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     learning_path = relationship("LearningPath", back_populates="modules")
@@ -64,8 +64,8 @@ class LearningPathContentItem(Base):
     module_id = Column(String, ForeignKey("learning_path_modules.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     module = relationship("LearningPathModule", back_populates="content_items")
@@ -82,8 +82,8 @@ class LearningPathResource(Base):
     learning_path_id = Column(String, ForeignKey("learning_paths.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now)
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
     learning_path = relationship("LearningPath", back_populates="resources")

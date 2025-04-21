@@ -9,6 +9,7 @@ import datetime
 from contextlib import asynccontextmanager
 
 from app.api.v1.api import api_router
+from app.api.health import router as health_router
 from app.core.config import settings
 from app.core.database import engine, Base, get_db
 
@@ -91,6 +92,9 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR if settings.API_V1_STR.startswith('/') else f"/{settings.API_V1_STR}")
 
+# Include health check router at root level
+app.include_router(health_router)
+
 # Add debug routes
 @app.get("/debug/environment")
 def debug_environment():
@@ -128,57 +132,7 @@ def root():
         "health": "/health"
     })
 
-@app.get("/health")
-def health_check():
-    """Health check endpoint for the API."""
-    import platform
-    import sys
-    import psutil
-
-    # Collect system information
-    system_info = {
-        "python_version": sys.version,
-        "platform": platform.platform(),
-        "memory_usage": f"{psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB",
-        "cpu_count": psutil.cpu_count(),
-    }
-
-    # Check environment variables (sanitized)
-    env_vars = {}
-    for key in ["ENVIRONMENT", "PORT", "API_V1_STR", "PROJECT_NAME", "DISABLE_DATABASE_CHECK_ON_STARTUP"]:
-        env_vars[key] = os.environ.get(key, "Not set")
-
-    # Database connection check (optional)
-    db_status = "not_checked"
-    db_error = None
-
-    if os.environ.get("DISABLE_DATABASE_CHECK_ON_STARTUP") != "true":
-        try:
-            with engine.connect() as conn:
-                # Execute a simple query
-                from sqlalchemy import text
-                conn.execute(text("SELECT 1"))
-                db_status = "connected"
-        except Exception as e:
-            db_status = "error"
-            db_error = str(e)
-            logger.warning(f"Health check database connection failed: {e}")
-
-    # Always return 200 status code for health checks
-    return JSONResponse({
-        "status": "healthy",
-        "message": "CodeSnippets API is running",
-        "version": "1.0.0",
-        "environment": os.environ.get("ENVIRONMENT", "production"),
-        "database": {
-            "status": db_status,
-            "error": db_error,
-            "url_type": str(settings.DATABASE_URL).split(":")[0] if settings.DATABASE_URL else "None"
-        },
-        "system": system_info,
-        "environment_variables": env_vars,
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
-    })
+# Health check endpoint moved to app/api/health.py
 
 if __name__ == "__main__":
     import uvicorn

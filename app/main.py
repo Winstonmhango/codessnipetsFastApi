@@ -9,6 +9,7 @@ import datetime
 from contextlib import asynccontextmanager
 
 from app.api.v1.api import api_router
+from app.api.debug import router as debug_router
 from app.core.config import settings
 from app.core.database import engine, Base, get_db
 
@@ -91,6 +92,9 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR if settings.API_V1_STR.startswith('/') else f"/{settings.API_V1_STR}")
 
+# Include debug router at root level
+app.include_router(debug_router)
+
 # Health check router included directly
 
 # Add debug routes
@@ -133,12 +137,84 @@ def root():
 @app.get("/health")
 def health_check():
     """Health check endpoint for the API."""
-    # Always return a 200 status code for health checks
-    # This is a simplified health check that doesn't depend on the database
+    import platform
+    import sys
+    import os
+    import datetime
+    import traceback
+
+    # Collect system information
+    system_info = {
+        "python_version": sys.version,
+        "platform": platform.platform(),
+        "current_directory": os.getcwd(),
+        "timestamp": datetime.datetime.now().isoformat(),
+    }
+
+    # Collect environment variables (sanitized)
+    env_vars = {}
+    for key, value in os.environ.items():
+        if not any(sensitive in key.lower() for sensitive in ["secret", "password", "key", "token"]):
+            env_vars[key] = value
+
+    # Check if important files exist
+    file_checks = {
+        "main.py": os.path.exists("app/main.py"),
+        "api.py": os.path.exists("app/api/v1/api.py"),
+        "database.py": os.path.exists("app/core/database.py"),
+    }
+
+    # Try to import important modules
+    import_checks = {}
+    try:
+        import fastapi
+        import_checks["fastapi"] = "success"
+    except Exception as e:
+        import_checks["fastapi"] = f"error: {str(e)}"
+
+    try:
+        import sqlalchemy
+        import_checks["sqlalchemy"] = "success"
+    except Exception as e:
+        import_checks["sqlalchemy"] = f"error: {str(e)}"
+
+    try:
+        import starlette
+        import_checks["starlette"] = "success"
+    except Exception as e:
+        import_checks["starlette"] = f"error: {str(e)}"
+
+    # Try a simple database connection
+    db_status = "not_checked"
+    db_error = None
+
+    try:
+        # Only do a quick check to avoid blocking the health check
+        from app.core.database import engine
+        from sqlalchemy import text
+
+        with engine.connect() as conn:
+            result = conn.execute(text("SELECT 1"))
+            db_status = "connected"
+    except Exception as e:
+        db_status = "error"
+        db_error = str(e)
+        db_traceback = traceback.format_exc()
+        logger.error(f"Health check database connection failed: {e}\n{db_traceback}")
+
+    # Always return 200 status code for health checks
     # Railway uses this endpoint to determine if the application is healthy
     return JSONResponse({
         "status": "healthy",
-        "message": "CodeSnippets API is running"
+        "message": "CodeSnippets API is running",
+        "system": system_info,
+        "file_checks": file_checks,
+        "import_checks": import_checks,
+        "database": {
+            "status": db_status,
+            "error": db_error
+        },
+        "environment": env_vars
     })
 
 if __name__ == "__main__":

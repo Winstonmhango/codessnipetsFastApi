@@ -3,12 +3,14 @@ builder = "nixpacks"
 buildCommand = "pip install -r requirements.txt"
 
 [deploy]
-startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
-healthcheckPath = "/"
-healthcheckTimeout = 120
+startCommand = "./railway_startup.sh"
+healthcheckPath = "/health"
+healthcheckTimeout = 180
 restartPolicyType = "always"
 restartPolicyMaxRetries = 5
 
 [deploy.env]
 ENVIRONMENT = "production"
+LOG_LEVEL = "debug"
+DISABLE_DATABASE_CHECK_ON_STARTUP = "true"
 

@@ -9,3 +9,26 @@ from app.models.learning_path import (
     LearningPathContentItem,
     LearningPathResource,
 )
+from app.models.quiz import (
+    Quiz,
+    QuizQuestion,
+    QuizAnswer,
+    UserQuizAttempt,
+)
+from app.models.award import (
+    Award,
+    UserAward,
+)
+from app.models.course import (
+    CourseCategory,
+    Course,
+    CourseModule,
+    CourseTopic,
+    TopicLesson,
+    CourseEnrollment,
+    CourseProgress,
+)
+from app.models.marketing import (
+    NewsletterSubscription,
+    MarketingBanner,
+)

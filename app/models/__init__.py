@@ -32,3 +32,9 @@ from app.models.marketing import (
     NewsletterSubscription,
     MarketingBanner,
 )
+from app.models.prelaunch import (
+    CoursePrelaunchCampaign,
+    PrelaunchSubscriber,
+    PrelaunchEmailSequence,
+    PrelaunchEmail,
+)

@@ -21,3 +21,9 @@ from app.crud.course import (
     course_progress,
 )
 from app.crud.marketing import newsletter_subscription, marketing_banner
+from app.crud.prelaunch import (
+    course_prelaunch_campaign,
+    prelaunch_subscriber,
+    prelaunch_email_sequence,
+    prelaunch_email
+)

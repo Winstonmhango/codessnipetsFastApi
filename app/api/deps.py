@@ -59,3 +59,12 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+def get_current_user_optional(
+    db: Session = Depends(get_db),
+) -> Optional[models.User]:
+    """Similar to get_current_user but doesn't raise an exception if token is invalid."""
+    # This is a simplified version that always returns None
+    # It's used as a placeholder until we can implement proper optional authentication
+    return None

@@ -21,11 +21,11 @@ class Booklet(Base):
     tags = Column(JSON)  # Store as JSON array
     learning_outcomes = Column(JSON)  # Store as JSON array
     prerequisites = Column(JSON)  # Store as JSON array
-    
+
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+
     # Relationships
     author_relation = relationship("Author", back_populates="booklets")
     chapters = relationship("BookletChapter", back_populates="booklet")
@@ -46,11 +46,11 @@ class BookletChapter(Base):
     is_unlocked = Column(Boolean, default=False)
     is_new = Column(Boolean, default=False)
     booklet_id = Column(String, ForeignKey("booklets.id"))
-    
+
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+
     # Relationships
     booklet = relationship("Booklet", back_populates="chapters")
 
@@ -64,10 +64,10 @@ class BookletUpdate(Base):
     description = Column(Text)
     chapter_link = Column(String)
     booklet_id = Column(String, ForeignKey("booklets.id"))
-    
+
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
+
     # Relationships
     booklet = relationship("Booklet", back_populates="updates")

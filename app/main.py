@@ -9,7 +9,6 @@ import datetime
 from contextlib import asynccontextmanager
 
 from app.api.v1.api import api_router
-from app.api.health import router as health_router
 from app.core.config import settings
 from app.core.database import engine, Base, get_db
 
@@ -92,8 +91,7 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR if settings.API_V1_STR.startswith('/') else f"/{settings.API_V1_STR}")
 
-# Include health check router at root level
-app.include_router(health_router)
+# Health check router included directly
 
 # Add debug routes
 @app.get("/debug/environment")
@@ -132,7 +130,16 @@ def root():
         "health": "/health"
     })
 
-# Health check endpoint moved to app/api/health.py
+@app.get("/health")
+def health_check():
+    """Health check endpoint for the API."""
+    # Always return a 200 status code for health checks
+    # This is a simplified health check that doesn't depend on the database
+    # Railway uses this endpoint to determine if the application is healthy
+    return JSONResponse({
+        "status": "healthy",
+        "message": "CodeSnippets API is running"
+    })
 
 if __name__ == "__main__":
     import uvicorn

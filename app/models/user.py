@@ -26,8 +26,8 @@ class User(Base):
     preferences = Column(JSON)  # User preferences as JSON
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
 
     # Relationships
     quiz_attempts = relationship("UserQuizAttempt", back_populates="user")

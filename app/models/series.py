@@ -17,8 +17,8 @@ class Author(Base):
     linkedin = Column(String)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
 
     # Relationships
     series = relationship("Series", back_populates="author_relation")
@@ -43,8 +43,8 @@ class Series(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
 
     # Relationships
     author_relation = relationship("Author", back_populates="series")
@@ -65,8 +65,8 @@ class SeriesArticle(Base):
     series_id = Column(String, ForeignKey("series.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now)
 
     # Relationships
     series = relationship("Series", back_populates="articles")

@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime, JSON, Float, Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -23,7 +23,7 @@ class CourseCategory(Base):
     parent_id = Column(String, ForeignKey("course_categories.id"), nullable=True)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -31,7 +31,7 @@ class CourseCategory(Base):
     subcategories = relationship("CourseCategory",
                                 backref="parent",
                                 remote_side=[id],
-                                cascade="all, delete-orphan")
+                                cascade="all")
 
 
 class Course(Base):
@@ -56,7 +56,7 @@ class Course(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     published_at = Column(DateTime(timezone=True))
 
@@ -82,7 +82,7 @@ class CourseModule(Base):
     is_free_preview = Column(Boolean, default=False)  # Free preview for paid courses
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -101,7 +101,7 @@ class CourseTopic(Base):
     is_published = Column(Boolean, default=False)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -123,7 +123,7 @@ class TopicLesson(Base):
     is_published = Column(Boolean, default=False)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -142,7 +142,7 @@ class CourseEnrollment(Base):
     id = Column(String, primary_key=True, index=True)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
     course_id = Column(String, ForeignKey("courses.id"), nullable=False)
-    enrolled_at = Column(DateTime(timezone=True), server_default=func.now())
+    enrolled_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     is_completed = Column(Boolean, default=False)
     completed_at = Column(DateTime(timezone=True))
     progress_percentage = Column(Float, default=0.0)
@@ -163,7 +163,7 @@ class CourseProgress(Base):
     content_id = Column(String, nullable=False)
     is_completed = Column(Boolean, default=False)
     completed_at = Column(DateTime(timezone=True))
-    last_accessed_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_accessed_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
 
     # Relationships
     enrollment = relationship("CourseEnrollment", back_populates="progress_records")

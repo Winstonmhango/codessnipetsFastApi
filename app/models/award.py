@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -17,7 +17,7 @@ class Award(Base):
     requirements = Column(JSON)  # JSON object with requirements to earn this award
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -30,7 +30,7 @@ class UserAward(Base):
     id = Column(String, primary_key=True, index=True)
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
     award_id = Column(String, ForeignKey("awards.id"), nullable=False)
-    earned_at = Column(DateTime(timezone=True), server_default=func.now())
+    earned_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     progress = Column(Integer, default=100)  # Progress percentage (100 means completed)
     award_metadata = Column(JSON)  # Additional data about how the award was earned
 

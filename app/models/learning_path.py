@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -24,7 +24,7 @@ class LearningPath(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -46,7 +46,7 @@ class LearningPathModule(Base):
     learning_path_id = Column(String, ForeignKey("learning_paths.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -64,7 +64,7 @@ class LearningPathContentItem(Base):
     module_id = Column(String, ForeignKey("learning_path_modules.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -82,7 +82,7 @@ class LearningPathResource(Base):
     learning_path_id = Column(String, ForeignKey("learning_paths.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships

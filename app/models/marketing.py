@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, String, DateTime, Text, JSON, ForeignKey, Integer
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -12,7 +12,7 @@ class NewsletterSubscription(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     name = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
-    subscribed_at = Column(DateTime(timezone=True), server_default=func.now())
+    subscribed_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     unsubscribed_at = Column(DateTime(timezone=True), nullable=True)
     source = Column(String, nullable=True)  # Where the subscription came from (e.g., 'homepage', 'blog', 'course')
     synced_to_kit = Column(Boolean, default=False)  # Whether the subscription has been synced to Kit.com
@@ -48,7 +48,7 @@ class MarketingBanner(Base):
     priority = Column(Integer, default=0)  # Higher priority banners are shown first
 
     # Tracking
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     created_by = Column(String, ForeignKey("users.id"), nullable=True)
 

@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, String, DateTime, Text, JSON, ForeignKey, Integer, Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -67,7 +67,7 @@ class CoursePrelaunchCampaign(Base):
     conversion_rate = Column(Integer, default=0)  # Calculated as (signup_count / view_count) * 100
 
     # Metadata
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     created_by = Column(String, ForeignKey("users.id"), nullable=True)
 
@@ -95,7 +95,7 @@ class PrelaunchSubscriber(Base):
 
     # Subscription details
     campaign_id = Column(String, ForeignKey("course_prelaunch_campaigns.id"), nullable=False)
-    subscribed_at = Column(DateTime(timezone=True), server_default=func.now())
+    subscribed_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     is_active = Column(Boolean, default=True)
     unsubscribed_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -135,7 +135,7 @@ class PrelaunchEmailSequence(Base):
     is_active = Column(Boolean, default=True)
 
     # Metadata
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -161,7 +161,7 @@ class PrelaunchEmail(Base):
     is_active = Column(Boolean, default=True)
 
     # Metadata
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Statistics

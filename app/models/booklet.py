@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -23,7 +23,7 @@ class Booklet(Base):
     prerequisites = Column(JSON)  # Store as JSON array
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -48,7 +48,7 @@ class BookletChapter(Base):
     booklet_id = Column(String, ForeignKey("booklets.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -66,7 +66,7 @@ class BookletUpdate(Base):
     booklet_id = Column(String, ForeignKey("booklets.id"))
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships

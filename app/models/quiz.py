@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey, DateTime, JSON, Float
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 
 from app.core.database import Base
 
@@ -23,7 +23,7 @@ class Quiz(Base):
     show_correct_answers = Column(Boolean, default=True)
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -43,7 +43,7 @@ class QuizQuestion(Base):
     order = Column(Integer, default=0)  # For ordering questions
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -62,7 +62,7 @@ class QuizAnswer(Base):
     order = Column(Integer, default=0)  # For ordering answers
 
     # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
@@ -81,7 +81,7 @@ class UserQuizAttempt(Base):
     answers = Column(JSON)  # Store user's answers as JSON
 
     # Timestamps
-    started_at = Column(DateTime(timezone=True), server_default=func.now())
+    started_at = Column(DateTime(timezone=True), server_default=text('NOW()'))
     completed_at = Column(DateTime(timezone=True))
 
     # Relationships
